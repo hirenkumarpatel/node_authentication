@@ -6,6 +6,7 @@
  * mongodb+srv://<username>:<password>@nodecluster-okay0.mongodb.net/test?retryWrites=true&w=majority
  * install dotenv to hide user and password from above string so that can prevent unauthorised access
  * importing body-parser to parse json data on http request like post and get
+ * install bcryptjs for hashing password
  */
 const express=require('express');
 const app=express();
