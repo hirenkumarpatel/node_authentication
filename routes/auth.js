@@ -3,6 +3,7 @@ const router = require("express").Router();
 const User = require("../model/User");
 const { registerValidation,loginValidation } = require("../validation");
 const bcrypt=require("bcryptjs");
+const jwt=require("jsonwebtoken");
 
 //creating routes to post /register
 //async will finish process before start any new process
@@ -30,7 +31,7 @@ router.post("/register", async (req, res) => {
   try {
     //await will wait till async process finish so it wont try to save before insertion of new data save is mongoose function to save data
     const savedUser = await user.save();
-    res.send(savedUser);
+    res.send(user._id);
   } catch (err) {
     res.status(400).send(err);
   }
@@ -51,11 +52,16 @@ router.post("/login",async (req,res)=>{
         const validPassword=await bcrypt.compare(req.body.password,user.password);
         if(!validPassword) return res.status(400).send('Invalid Password !!');
 
-        res.send("Authentication successful !!");
+        //assigning the json web token by pasing some unique information and token secret
+        const token=jwt.sign({_id:user._id},process.env.SECRET_KEY);
+        //now send token along with header
+        res.header({"auth-token":token}).send(token);
+        
+        //res.send("Authentication successful !!");
 
     }
     
-})
+});
 
 //exposrting router module
 module.exports = router;

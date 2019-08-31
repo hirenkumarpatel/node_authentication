@@ -7,6 +7,7 @@
  * install dotenv to hide user and password from above string so that can prevent unauthorised access
  * importing body-parser to parse json data on http request like post and get
  * install bcryptjs for hashing password
+ * install jsonwebtoken
  */
 const express=require('express');
 const app=express();
@@ -14,6 +15,7 @@ const port=process.env.PORT ||3000;
 const dotenv=require("dotenv");
 const mongoose=require("mongoose");
 const authRoute=require("./routes/auth");
+const postRoute=require("./routes/posts");
 
 //to configure dotenv variable to process's environment variable
 dotenv.config();
@@ -26,6 +28,8 @@ app.use(express.json());
 
 //Route middleware to handle route to be used while accessing authroute's post method 
 app.use("/api/user",authRoute);
+//Middleware to route when user type/api/posts
+app.use("/api/posts",postRoute);
 
 
 //listeninig to server
